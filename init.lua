@@ -102,7 +102,7 @@ vim.g.have_nerd_font = false
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -293,7 +293,7 @@ require('lazy').setup({
       set({ 'n', 'x' }, '<c-q>', mc.toggleCursor)
 
       -- NOTE: Advanced Actions
-      --
+
       -- Pressing `gaip` will add a cursor on each line of a paragraph.
       set('n', 'ga', mc.addCursorOperator)
 
@@ -328,7 +328,7 @@ require('lazy').setup({
       set('x', 'I', mc.insertVisual)
       set('x', 'A', mc.appendVisual)
 
-      -- Increment/decrement sequences, treaing all cursors as one sequence.
+      -- Increment/decrement sequences, treating all cursors as one sequence.
       set({ 'n', 'x' }, 'g<c-a>', mc.sequenceIncrement)
       set({ 'n', 'x' }, 'g<c-x>', mc.sequenceDecrement)
 
@@ -382,6 +382,14 @@ require('lazy').setup({
         -- Select a different cursor as the main one.
         layerSet({ 'n', 'x' }, '<M-h>', mc.prevCursor)
         layerSet({ 'n', 'x' }, '<M-l>', mc.nextCursor)
+
+        -- NOTE: RSBoi custom binds
+        layerSet({ 'n', 'x' }, '<M-.>', function()
+          vim.fn.feedkeys(vim.api.nvim_replace_termcodes("m'<M-l><C-q><C-o><C-q>", true, false, true), 'm')
+        end)
+        layerSet({ 'n', 'x' }, '<M-,>', function()
+          vim.fn.feedkeys(vim.api.nvim_replace_termcodes("m'<M-h><C-q><C-o><C-q>", true, false, true), 'm')
+        end)
 
         -- Delete the main cursor.
         layerSet({ 'n', 'x' }, '<leader>x', mc.deleteCursor)
