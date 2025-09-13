@@ -384,12 +384,7 @@ require('lazy').setup({
         layerSet({ 'n', 'x' }, '<M-l>', mc.nextCursor)
 
         -- NOTE: RSBoi custom binds
-        layerSet({ 'n', 'x' }, '<M-.>', function()
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes("m'<M-l><C-q><C-o><C-q>", true, false, true), 'm')
-        end)
-        layerSet({ 'n', 'x' }, '<M-,>', function()
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes("m'<M-h><C-q><C-o><C-q>", true, false, true), 'm')
-        end)
+        -- NOTE: /RSBoi
 
         -- Delete the main cursor.
         layerSet({ 'n', 'x' }, '<leader>x', mc.deleteCursor)
@@ -420,6 +415,7 @@ require('lazy').setup({
     lazy = false,
     version = '*', -- or branch = "dev", to use the latest commit
   },
+  -- NOTE: /RSBoi
 
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
@@ -1194,3 +1190,4 @@ require('lazy').setup({
 vim.opt.foldmethod = 'indent'
 vim.opt.foldlevel = 8
 vim.opt.shell = 'powershell.exe'
+-- NOTE: /RSBoi
