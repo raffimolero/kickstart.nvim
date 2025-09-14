@@ -960,7 +960,6 @@ require('lazy').setup({
         end)
 
         -- from mini.files helptext: # Create mappings which use data from entry under cursor ~
-
         -- Set focused directory as current working directory
         local set_cwd = function()
           local path = (MiniFiles.get_fs_entry() or {}).path
