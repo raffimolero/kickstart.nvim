@@ -8,6 +8,8 @@ require('mini.sessions').setup {
 
 -- TODO:
 -- fix Rust-analyzer
+-- ask to save session name on exit
+-- select session on startup
 
 -- Normal mode
 vim.keymap.set('n', '<C-/>', 'gcc', { remap = true })
