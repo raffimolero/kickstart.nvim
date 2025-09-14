@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -246,7 +246,7 @@ rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  -- NOTE: RSBoi Plugins
+  -- TODO: RSBoi Plugins
   {
     'jake-stewart/multicursor.nvim',
     branch = 'main',
@@ -383,8 +383,8 @@ require('lazy').setup({
         layerSet({ 'n', 'x' }, '<M-h>', mc.prevCursor)
         layerSet({ 'n', 'x' }, '<M-l>', mc.nextCursor)
 
-        -- NOTE: RSBoi custom binds
-        -- NOTE: /RSBoi
+        -- TODO: RSBoi custom binds
+        -- TODO: /RSBoi
 
         -- Delete the main cursor.
         layerSet({ 'n', 'x' }, '<leader>x', mc.deleteCursor)
@@ -415,7 +415,7 @@ require('lazy').setup({
     lazy = false,
     version = '*', -- or branch = "dev", to use the latest commit
   },
-  -- NOTE: /RSBoi
+  -- TODO: /RSBoi
 
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
@@ -1186,8 +1186,8 @@ require('lazy').setup({
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 
--- NOTE: RSBoi config
+-- TODO: RSBoi config
 vim.opt.foldmethod = 'indent'
 vim.opt.foldlevel = 8
 vim.opt.shell = 'powershell.exe'
--- NOTE: /RSBoi
+-- TODO: /RSBoi
