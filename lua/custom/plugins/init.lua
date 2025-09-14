@@ -11,8 +11,9 @@ require('mini.sessions').setup {
 -- ask to save session name on exit
 -- select session on startup
 
--- Normal mode
-vim.keymap.set('n', '<C-/>', 'gcc', { remap = true })
+-- Comments
+vim.keymap.set('n', '<C-/>', 'v<C-/>', { remap = true })
+vim.keymap.set('i', '<C-/>', '<Esc><C-/>a', { remap = true })
 vim.keymap.set('v', '<C-/>', 'gc', { remap = true })
 
 -- Insert mode
@@ -23,8 +24,7 @@ vim.keymap.set('i', '<M-k>', '<Up>')
 vim.keymap.set('i', '<M-l>', '<Right>')
 
 -- code folding
-vim.opt.foldmethod = 'indent'
-vim.opt.foldlevel = 8
+vim.keymap.set('n', '<CR>', 'za')
 
 -- tabs
 vim.opt.softtabstop = 4
@@ -35,14 +35,54 @@ vim.opt.shell = 'powershell.exe'
 
 return {
   {
+    'kevinhwang91/nvim-ufo',
+    dependencies = { 'kevinhwang91/promise-async' },
+    event = 'VeryLazy', -- You can make it lazy-loaded via VeryLazy, but comment out if anything doesn’t work
+    init = function()
+      vim.o.foldlevel = 99
+      vim.o.foldlevelstart = 99
+    end,
+    config = function()
+      -- "minimal config"
+
+      vim.o.foldcolumn = '1' -- '0' is not bad
+      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
+
+      -- Option 2: nvim lsp as LSP client
+      -- Tell the server the capability of foldingRange,
+      -- Neovim hasn't added foldingRange to default capabilities, users must add it manually
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      }
+      local language_servers = require('lspconfig').util.available_servers() -- or list servers manually like {'gopls', 'clangd'}
+      for _, ls in ipairs(language_servers) do
+        require('lspconfig')[ls].setup {
+          capabilities = capabilities,
+          -- you can add other fields for setting up lsp server in this table
+        }
+      end
+      require('ufo').setup {
+        -- your config goes here
+        -- open_fold_hl_timeout = ...,
+        -- provider_selector = function(bufnr, filetype)
+        --  ...
+        -- end,
+      }
+    end,
+  },
+  {
     'folke/flash.nvim',
     event = 'VeryLazy',
     ---@type Flash.Config
     opts = {},
     -- stylua: ignore
     keys = {
-      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "<leader>j", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "<leader>J", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
       { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
       { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
       { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
