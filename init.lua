@@ -246,177 +246,6 @@ rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  -- TODO: RSBoi Plugins
-  {
-    'jake-stewart/multicursor.nvim',
-    branch = 'main',
-    config = function()
-      local mc = require 'multicursor-nvim'
-      mc.setup()
-
-      local set = vim.keymap.set
-
-      -- Add or skip cursor above/below the main cursor.
-      set({ 'n', 'x' }, '<M-k>', function()
-        mc.lineAddCursor(-1)
-      end)
-      set({ 'n', 'x' }, '<M-j>', function()
-        mc.lineAddCursor(1)
-      end)
-      set({ 'n', 'x' }, '<leader><up>', function()
-        mc.lineSkipCursor(-1)
-      end)
-      set({ 'n', 'x' }, '<leader><down>', function()
-        mc.lineSkipCursor(1)
-      end)
-
-      -- Add or skip adding a new cursor by matching word/selection
-      set({ 'n', 'x' }, '<leader>n', function()
-        mc.matchAddCursor(1)
-      end)
-      set({ 'n', 'x' }, '<leader>s', function()
-        mc.matchSkipCursor(1)
-      end)
-      set({ 'n', 'x' }, '<leader>N', function()
-        mc.matchAddCursor(-1)
-      end)
-      set({ 'n', 'x' }, '<leader>S', function()
-        mc.matchSkipCursor(-1)
-      end)
-
-      -- Add and remove cursors with control + left click.
-      set('n', '<c-leftmouse>', mc.handleMouse)
-      set('n', '<c-leftdrag>', mc.handleMouseDrag)
-      set('n', '<c-leftrelease>', mc.handleMouseRelease)
-
-      -- Disable and enable cursors.
-      set({ 'n', 'x' }, '<c-q>', mc.toggleCursor)
-
-      -- NOTE: Advanced Actions
-
-      -- Pressing `gaip` will add a cursor on each line of a paragraph.
-      set('n', 'ga', mc.addCursorOperator)
-
-      -- Clone every cursor and disable the originals.
-      set({ 'n', 'x' }, '<leader><c-q>', mc.duplicateCursors)
-
-      -- Align cursor columns.
-      set('n', '<leader>a', mc.alignCursors)
-
-      -- Split visual selections by regex.
-      set('x', 'S', mc.splitCursors)
-
-      -- match new cursors within visual selections by regex.
-      set('x', 'M', mc.matchCursors)
-
-      -- bring back cursors if you accidentally clear them
-      set('n', '<leader>gv', mc.restoreCursors)
-
-      -- Add a cursor for all matches of cursor word/selection in the document.
-      set({ 'n', 'x' }, '<leader>A', mc.matchAllAddCursors)
-
-      -- Rotate the text contained in each visual selection between cursors.
-      set('x', '<leader>t', function()
-        mc.transposeCursors(1)
-      end)
-      set('x', '<leader>T', function()
-        mc.transposeCursors(-1)
-      end)
-
-      -- Append/insert for each line of visual selections.
-      -- Similar to block selection insertion.
-      set('x', 'I', mc.insertVisual)
-      set('x', 'A', mc.appendVisual)
-
-      -- Increment/decrement sequences, treating all cursors as one sequence.
-      set({ 'n', 'x' }, 'g<c-a>', mc.sequenceIncrement)
-      set({ 'n', 'x' }, 'g<c-x>', mc.sequenceDecrement)
-
-      -- Add a cursor and jump to the next/previous search result.
-      set('n', '<leader>/n', function()
-        mc.searchAddCursor(1)
-      end)
-      set('n', '<leader>/N', function()
-        mc.searchAddCursor(-1)
-      end)
-
-      -- Jump to the next/previous search result without adding a cursor.
-      set('n', '<leader>/s', function()
-        mc.searchSkipCursor(1)
-      end)
-      set('n', '<leader>/S', function()
-        mc.searchSkipCursor(-1)
-      end)
-
-      -- Add a cursor to every search result in the buffer.
-      set('n', '<leader>/A', mc.searchAllAddCursors)
-
-      -- Pressing `<leader>miwap` will create a cursor in every match of the
-      -- string captured by `iw` inside range `ap`.
-      -- This action is highly customizable, see `:h multicursor-operator`.
-      set({ 'n', 'x' }, '<leader>m', mc.operator)
-
-      -- Add or skip adding a new cursor by matching diagnostics.
-      set({ 'n', 'x' }, ']d', function()
-        mc.diagnosticAddCursor(1)
-      end)
-      set({ 'n', 'x' }, '[d', function()
-        mc.diagnosticAddCursor(-1)
-      end)
-      set({ 'n', 'x' }, ']s', function()
-        mc.diagnosticSkipCursor(1)
-      end)
-      set({ 'n', 'x' }, '[S', function()
-        mc.diagnosticSkipCursor(-1)
-      end)
-
-      -- Press `mdip` to add a cursor for every error diagnostic in the range `ip`.
-      set({ 'n', 'x' }, 'md', function()
-        -- See `:h vim.diagnostic.GetOpts`.
-        mc.diagnosticMatchCursors { severity = vim.diagnostic.severity.ERROR }
-      end)
-
-      -- Mappings defined in a keymap layer only apply when there are
-      -- multiple cursors. This lets you have overlapping mappings.
-      mc.addKeymapLayer(function(layerSet)
-        -- Select a different cursor as the main one.
-        layerSet({ 'n', 'x' }, '<M-h>', mc.prevCursor)
-        layerSet({ 'n', 'x' }, '<M-l>', mc.nextCursor)
-
-        -- TODO: RSBoi custom binds
-        -- TODO: /RSBoi
-
-        -- Delete the main cursor.
-        layerSet({ 'n', 'x' }, '<leader>x', mc.deleteCursor)
-
-        -- Enable and clear cursors using escape.
-        layerSet('n', '<esc>', function()
-          if not mc.cursorsEnabled() then
-            mc.enableCursors()
-          else
-            mc.clearCursors()
-          end
-        end)
-      end)
-
-      -- Customize how cursors look.
-      local hl = vim.api.nvim_set_hl
-      hl(0, 'MultiCursorCursor', { reverse = true })
-      hl(0, 'MultiCursorVisual', { link = 'Visual' })
-      hl(0, 'MultiCursorSign', { link = 'SignColumn' })
-      hl(0, 'MultiCursorMatchPreview', { link = 'Search' })
-      hl(0, 'MultiCursorDisabledCursor', { reverse = true })
-      hl(0, 'MultiCursorDisabledVisual', { link = 'Visual' })
-      hl(0, 'MultiCursorDisabledSign', { link = 'SignColumn' })
-    end,
-  },
-  {
-    'NStefan002/screenkey.nvim',
-    lazy = false,
-    version = '*', -- or branch = "dev", to use the latest commit
-  },
-  -- TODO: /RSBoi
-
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
 
@@ -1091,6 +920,86 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
+      -- TODO: RSBoi config
+      local function setup_mini_sessions()
+        require('mini.sessions').setup {
+          autoread = true,
+        }
+      end
+      setup_mini_sessions()
+
+      local function setup_mini_files()
+        -- TODO: make this delete to recycle bin instead of permanent
+        require('mini.files').setup {
+          mappings = {
+            close = '<Esc>',
+            go_in = 'L',
+            go_in_plus = '<CR>',
+            go_out = '',
+            go_out_plus = 'H',
+            mark_goto = "'",
+            mark_set = 'm',
+            reset = ',',
+            reveal_cwd = '.',
+            show_help = 'g?',
+            synchronize = '<C-s>',
+            trim_left = '<',
+            trim_right = '>',
+          },
+          windows = {
+            preview = true,
+          },
+        }
+
+        -- https://www.reddit.com/r/neovim/comments/1fzfiex/comment/lr3enqg/
+        vim.keymap.set('n', '<leader>o', function()
+          MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+
+          MiniFiles.reveal_cwd()
+        end)
+
+        -- mini.files # Create mappings which use data from entry under cursor ~
+
+        -- Set focused directory as current working directory
+        local set_cwd = function()
+          local path = (MiniFiles.get_fs_entry() or {}).path
+          if path == nil then
+            return vim.notify 'Cursor is not on valid entry'
+          end
+          vim.fn.chdir(vim.fs.dirname(path))
+        end
+
+        -- Yank in register full path of entry under cursor
+        local yank_path = function()
+          local path = (MiniFiles.get_fs_entry() or {}).path
+          if path == nil then
+            return vim.notify 'Cursor is not on valid entry'
+          end
+          vim.fn.setreg(vim.v.register, path)
+        end
+
+        -- Open path with system default handler (useful for non-text files)
+        local ui_open = function()
+          vim.ui.open(MiniFiles.get_fs_entry().path)
+        end
+
+        vim.api.nvim_create_autocmd('User', {
+          pattern = 'MiniFilesBufferCreate',
+          callback = function(args)
+            local b = args.data.buf_id
+            vim.keymap.set('n', 'g.', function()
+              set_cwd()
+              MiniFiles.reveal_cwd()
+              MiniFiles.trim_left()
+            end, { buffer = b, desc = 'Set cwd' })
+            vim.keymap.set('n', 'gX', ui_open, { buffer = b, desc = 'OS open' })
+            vim.keymap.set('n', 'gy', yank_path, { buffer = b, desc = 'Yank path' })
+          end,
+        })
+      end
+      setup_mini_files()
+      -- TODO: /RSBoi
+
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
@@ -1145,18 +1054,18 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
@@ -1186,9 +1095,3 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
-
--- TODO: RSBoi config
-vim.opt.foldmethod = 'indent'
-vim.opt.foldlevel = 8
-vim.opt.shell = 'powershell.exe'
--- TODO: /RSBoi
