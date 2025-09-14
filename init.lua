@@ -924,6 +924,7 @@ require('lazy').setup({
       local function setup_mini_sessions()
         require('mini.sessions').setup {
           autoread = true,
+          autowrite = true,
         }
       end
       setup_mini_sessions()
@@ -958,7 +959,7 @@ require('lazy').setup({
           MiniFiles.reveal_cwd()
         end)
 
-        -- mini.files # Create mappings which use data from entry under cursor ~
+        -- from mini.files helptext: # Create mappings which use data from entry under cursor ~
 
         -- Set focused directory as current working directory
         local set_cwd = function()
