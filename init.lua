@@ -958,6 +958,9 @@ require('lazy').setup({
 
           MiniFiles.reveal_cwd()
         end)
+        vim.keymap.set('n', '<leader>O', function()
+          MiniFiles.open()
+        end)
 
         -- from mini.files helptext: # Create mappings which use data from entry under cursor ~
         -- Set focused directory as current working directory

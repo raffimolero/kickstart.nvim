@@ -10,6 +10,7 @@ require('mini.sessions').setup {
 -- fix Rust-analyzer
 -- ask to save session name on exit
 -- select session on startup
+-- is this a distribution
 
 -- Comments
 vim.keymap.set('n', '<C-/>', 'v<C-/>', { remap = true })
@@ -34,6 +35,11 @@ vim.opt.expandtab = true
 vim.opt.shell = 'powershell.exe'
 
 return {
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^6', -- Recommended
+    lazy = false, -- This plugin is already lazy
+  },
   {
     'kevinhwang91/nvim-ufo',
     dependencies = { 'kevinhwang91/promise-async' },
