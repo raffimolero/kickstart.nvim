@@ -933,7 +933,7 @@ require('lazy').setup({
         -- TODO: make this delete to recycle bin instead of permanent
         require('mini.files').setup {
           mappings = {
-            close = '<Esc>',
+            close = 'q',
             go_in = 'L',
             go_in_plus = '<CR>',
             go_out = '',
@@ -952,8 +952,13 @@ require('lazy').setup({
           },
         }
 
-        -- https://www.reddit.com/r/neovim/comments/1fzfiex/comment/lr3enqg/
+        -- open from cwd
         vim.keymap.set('n', '<leader>o', function()
+          MiniFiles.open()
+        end)
+        -- https://www.reddit.com/r/neovim/comments/1fzfiex/comment/lr3enqg/
+        -- open from current buffer's parent directory
+        vim.keymap.set('n', '<leader>O', function()
           MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
 
           MiniFiles.reveal_cwd()
@@ -990,10 +995,15 @@ require('lazy').setup({
           pattern = 'MiniFilesBufferCreate',
           callback = function(args)
             local b = args.data.buf_id
+            -- cd to current folder
             vim.keymap.set('n', 'g.', function()
               set_cwd()
               MiniFiles.reveal_cwd()
               MiniFiles.trim_left()
+            end, { buffer = b, desc = 'Set cwd' })
+            vim.keymap.set('n', '<leader><CR>', function()
+              set_cwd()
+              MiniFiles.close()
             end, { buffer = b, desc = 'Set cwd' })
             vim.keymap.set('n', 'gX', ui_open, { buffer = b, desc = 'OS open' })
             vim.keymap.set('n', 'gy', yank_path, { buffer = b, desc = 'Yank path' })
