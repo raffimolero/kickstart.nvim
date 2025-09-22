@@ -953,18 +953,14 @@ require('lazy').setup({
         }
 
         -- open from cwd
-        vim.keymap.set('n', '<leader>o', function()
+        vim.keymap.set('n', '<leader>O', function()
           MiniFiles.open()
         end)
         -- https://www.reddit.com/r/neovim/comments/1fzfiex/comment/lr3enqg/
         -- open from current buffer's parent directory
-        vim.keymap.set('n', '<leader>O', function()
+        vim.keymap.set('n', '<leader>o', function()
           MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
-
           MiniFiles.reveal_cwd()
-        end)
-        vim.keymap.set('n', '<leader>O', function()
-          MiniFiles.open()
         end)
 
         -- from mini.files helptext: # Create mappings which use data from entry under cursor ~
